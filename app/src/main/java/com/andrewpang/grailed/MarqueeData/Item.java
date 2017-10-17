@@ -12,4 +12,12 @@ public class Item extends Data {
     @SerializedName("image_url")
     @Expose
     private String imageUrl;
+
+    public String getName() {
+        return name;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
 }

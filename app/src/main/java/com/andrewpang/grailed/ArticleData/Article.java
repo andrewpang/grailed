@@ -3,6 +3,8 @@ package com.andrewpang.grailed.ArticleData;
 import com.andrewpang.grailed.Data;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Article extends Data {
 
@@ -15,7 +17,6 @@ public class Article extends Data {
     @SerializedName("hero")
     @Expose
     private String hero;
-
 
     public String getTitle() {
         return title;
@@ -39,5 +40,16 @@ public class Article extends Data {
 
     public void setHero(String hero) {
         this.hero = hero;
+    }
+
+    public String getParsedDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        try {
+            date = sdf.parse(publishedAt);
+        } catch (Exception e) {
+            return "";
+        }
+        return sdf.format(date);
     }
 }

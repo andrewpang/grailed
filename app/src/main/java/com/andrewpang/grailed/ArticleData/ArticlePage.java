@@ -1,11 +1,11 @@
 package com.andrewpang.grailed.ArticleData;
 
-import com.andrewpang.grailed.Data;
+import com.andrewpang.grailed.HasDataList;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
-public class ArticlePage {
+public class ArticlePage implements HasDataList {
 
     @SerializedName("data")
     @Expose
@@ -29,5 +29,4 @@ public class ArticlePage {
     public void setMetadata(Metadata metadata) {
         this.metadata = metadata;
     }
-
 }

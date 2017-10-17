@@ -1,11 +1,11 @@
 package com.andrewpang.grailed.MarqueeData;
 
-import com.andrewpang.grailed.Data;
+import com.andrewpang.grailed.HasDataList;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
-public class Marquee extends Data{
+public class Marquee implements HasDataList {
 
     @SerializedName("data")
     @Expose
@@ -18,5 +18,4 @@ public class Marquee extends Data{
     public void setData(List<Item> data) {
         this.data = data;
     }
-
 }

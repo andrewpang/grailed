@@ -1,5 +1,6 @@
 package com.andrewpang.grailed.Adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.andrewpang.grailed.Holders.DataHolder;
 import com.andrewpang.grailed.Holders.ItemDataHolder;
 import com.andrewpang.grailed.MarqueeData.Item;
 import com.andrewpang.grailed.R;
+import com.bumptech.glide.Glide;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<DataHolder> {
@@ -19,19 +21,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<DataHolder> {
     private DataHolder dataHolder;
     private int type;
     private View view;
+    private Context context;
 
     public static final int ARTICLE_TYPE = 0;
     public static final int ITEM_TYPE = 1;
 
-//        public interface CardClickListener {
-//            void onItemClick(int position, View v);
-//        }
-//
-//        public static void setCardClickListener(CardClickListener cardClickListener) {
-//            FeedRecyclerViewAdapter.cardClickListener = cardClickListener;
-//        }
-
-    public RecyclerViewAdapter(int type, List dataSet) {
+    public RecyclerViewAdapter(Context context, int type, List dataSet) {
+        this.context = context;
         this.type = type;
         this.dataSet = dataSet;
     }
@@ -68,37 +64,38 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<DataHolder> {
     @Override
     public void onBindViewHolder(DataHolder holder, int position) {
         if (holder instanceof ArticleDataHolder) {
-            final ArticleDataHolder articleDataHolder = (ArticleDataHolder) holder;
-            final Article article = (Article) dataSet.get(position);
-
-//            articleDataHolder.dateTextView.setText("hi"
+            bindArticleViewHolder((ArticleDataHolder) holder, position);
         } else if (holder instanceof ItemDataHolder) {
-            final ItemDataHolder itemDataHolder = (ItemDataHolder) holder;
-            final Item item = (Item) dataSet.get(position);
+            bindItemViewHolder((ItemDataHolder) holder, position);
         }
+    }
 
+    private void bindArticleViewHolder(ArticleDataHolder articleDataHolder, int position) {
+        final Article article = (Article) dataSet.get(position);
+        articleDataHolder.getTitleTextView().setText(article.getTitle());
+        articleDataHolder.getDateTextView().setText(article.getParsedDate());
+        Glide.with(context)
+             .load(article.getHero())
+             .into(articleDataHolder.getArticleImageView());
+    }
+
+    private void bindItemViewHolder(ItemDataHolder itemDataHolder, int position) {
+        final Item item = (Item) dataSet.get(position);
+        itemDataHolder.getTitleTextView().setText(item.getName());
+        Glide.with(context)
+             .load(item.getImageUrl())
+             .into(itemDataHolder.getItemImageView());
     }
 
     public void addItems(List<Data> dataObj) {
-        for (int i = 0; i < dataObj.size(); i++) {
-            addItem(dataObj.get(i), i);
-        }
-    }
-
-    public void addItem(Data dataObj, int index) {
-        dataSet.add(index, dataObj);
-        notifyItemInserted(index);
-    }
-
-    public void deleteItem(int index) {
-        dataSet.remove(index);
-        notifyItemRemoved(index);
+        dataSet.clear();
+        dataSet.addAll(dataObj);
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
         return dataSet.size();
     }
-
 }
 
